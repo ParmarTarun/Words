@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 
-import '../Widgets/word.dart';
+import '../Widgets/drawer.dart';
+import '../Widgets/wordTitle.dart';
 import '../Widgets/wordDetails.dart';
 
 class HomeScreen extends StatelessWidget {
-  final String title = "Word";
+  static const routeName = '/home';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          title,
+          "Words",
           style: Theme.of(context).textTheme.headline,
         ),
         centerTitle: true,
       ),
+      drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Word(),
+            WordTitle(),
             Divider(
               color: Theme.of(context).primaryColor,
               thickness: 3,

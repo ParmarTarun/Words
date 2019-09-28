@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Word extends StatelessWidget {
+class WordTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

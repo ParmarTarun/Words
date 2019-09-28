@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:words/Screens/FavScreen.dart';
 
 import './Screens/homeScreen.dart';
 
@@ -58,9 +59,18 @@ class MyApp extends StatelessWidget {
                 fontStyle: FontStyle.italic,
                 color: primaryColor,
               ),
+              title: TextStyle(
+                fontFamily: 'Georgia',
+                fontSize: 24,
+                color: Colors.white
+              )
             ),
       ),
-      home: HomeScreen(),
+      routes: {
+        '/':(ctx)=>HomeScreen(),
+        HomeScreen.routeName:(ctx) => HomeScreen(),
+        FavouritesScreen.routeName:(ctx) => FavouritesScreen(),
+      },
     );
   }
 }
