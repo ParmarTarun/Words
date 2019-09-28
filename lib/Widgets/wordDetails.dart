@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WordDetails extends StatelessWidget {
+
+  final String defination;
+  final String examples;
+
+  WordDetails(this.defination, this.examples);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,7 +18,7 @@ class WordDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "a single distinct meaningful element of speech or writing,used with others (or sometimes alone) to form a sentence and typically shown with a space on either side when written or printed",
+            defination,
             style: Theme.of(context).textTheme.body1,
           ),
           SizedBox(
@@ -26,7 +32,7 @@ class WordDetails extends StatelessWidget {
             height: 20,
           ),
           Text(
-            "\"This\" is an English Word",
+            examples,
             style: Theme.of(context).textTheme.body2,
           ),
         ],

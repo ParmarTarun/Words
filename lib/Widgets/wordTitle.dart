@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class WordTitle extends StatelessWidget {
+
+  final String title;
+
+  WordTitle(this.title);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -10,7 +15,7 @@ class WordTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            "Word",
+            title,
             style: Theme.of(context).textTheme.subhead,
           ),
           IconButton(
