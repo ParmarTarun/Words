@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './Screens/homeScreen.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -35,56 +37,30 @@ class MyApp extends StatelessWidget {
                 //word
                 fontFamily: 'Georgia',
                 color: primaryColor,
-                fontSize: 48,
+                fontSize: 44,
                 fontWeight: FontWeight.w500,
+              ),
+              subtitle: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 20,
+                color: Color(0xFF5a99e9),
               ),
               body1: TextStyle(
                 //def,eg
                 fontFamily: 'Georgia',
-                fontStyle: FontStyle.italic,
-                color: Color(0xFF5a99e9),
+                fontSize: 24,
+                color: primaryColor
               ),
               body2: TextStyle(
-                  //actual content
-                  fontFamily: 'Georgia',
-                  fontStyle: FontStyle.italic,
-                  color: Colors.black,
-                ),
+                //actual content
+                fontFamily: 'Georgia',
+                fontSize: 20,
+                fontStyle: FontStyle.italic,
+                color: primaryColor,
+              ),
             ),
       ),
-      home: MyHomePage(title: 'Words'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: Theme.of(context).textTheme.headline,
-        ),
-        centerTitle: true,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Text("Subhead", style: Theme.of(context).textTheme.subhead,),
-          Text("Body1", style: Theme.of(context).textTheme.body1,),
-          Text("Body2", style: Theme.of(context).textTheme.body2,),
-        ]
-      )
+      home: HomeScreen(),
     );
   }
 }
