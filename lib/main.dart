@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:words/Screens/FavScreen.dart';
 
 import './Screens/homeScreen.dart';
+import 'package:provider/provider.dart';
+
+import './Providers/favsProvider.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,12 +26,14 @@ class MyApp extends StatelessWidget {
       900: Color.fromRGBO(28, 40, 54, 1),
     };
     const MaterialColor primaryColor = MaterialColor(0xFF1c2836, color);
-    return MaterialApp(
-      title: 'Words',
-      theme: ThemeData(
-        primarySwatch: primaryColor,
-        accentColor: Color(0xFFcccccc),
-        textTheme: ThemeData.dark().textTheme.copyWith(
+    return ChangeNotifierProvider(
+      builder: (ctx)=>FavouriteWords(),
+      child: MaterialApp(
+        title: 'Words',
+        theme: ThemeData(
+          primarySwatch: primaryColor,
+          accentColor: Color(0xFFcccccc),
+          textTheme: ThemeData.dark().textTheme.copyWith(
               headline: TextStyle(
                 //appBar title
                 fontFamily: 'Harlow',
@@ -38,7 +43,7 @@ class MyApp extends StatelessWidget {
                 //word
                 fontFamily: 'Georgia',
                 color: primaryColor,
-                fontSize: 44,
+                fontSize: 36,
                 fontWeight: FontWeight.w500,
               ),
               subtitle: TextStyle(
@@ -47,11 +52,10 @@ class MyApp extends StatelessWidget {
                 color: Color(0xFF5a99e9),
               ),
               body1: TextStyle(
-                //def,eg
-                fontFamily: 'Georgia',
-                fontSize: 24,
-                color: primaryColor
-              ),
+                  //def,eg
+                  fontFamily: 'Georgia',
+                  fontSize: 24,
+                  color: primaryColor),
               body2: TextStyle(
                 //actual content
                 fontFamily: 'Georgia',
@@ -60,17 +64,14 @@ class MyApp extends StatelessWidget {
                 color: primaryColor,
               ),
               title: TextStyle(
-                fontFamily: 'Georgia',
-                fontSize: 24,
-                color: Colors.white
-              )
-            ),
+                  fontFamily: 'Georgia', fontSize: 24, color: Colors.white)),
+        ),
+        routes: {
+          '/': (ctx) => HomeScreen(),
+          HomeScreen.routeName: (ctx) => HomeScreen(),
+          FavouritesScreen.routeName: (ctx) => FavouritesScreen(),
+        },
       ),
-      routes: {
-        '/':(ctx)=>HomeScreen(),
-        HomeScreen.routeName:(ctx) => HomeScreen(),
-        FavouritesScreen.routeName:(ctx) => FavouritesScreen(),
-      },
     );
   }
 }

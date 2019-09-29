@@ -4,24 +4,22 @@ import '../Widgets/wordTitle.dart';
 import '../Widgets/wordDetails.dart';
 
 class WordWidget extends StatelessWidget {
-  final String title;
-  final String defination;
-  final String examples;
+  final List word;
 
-  WordWidget(this.title, this.defination, this.examples);
+  WordWidget(this.word);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        title.isEmpty ? SizedBox() : WordTitle(title),
+        word[1].isEmpty ? SizedBox() : WordTitle(word[1]),
         Divider(
           color: Theme.of(context).primaryColor,
           thickness: 3,
           endIndent: 20.0,
           indent: 20.0,
         ),
-        WordDetails(defination, examples),
+        WordDetails(word[2],word[3]),
       ],
     );
   }
