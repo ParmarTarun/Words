@@ -124,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   List currentWord;
   int currentIndex = 0;
+  bool _isMarkedFav = false;
 
   @override
   void initState() {
@@ -136,80 +137,96 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  void changeWord(DismissDirection dismissData) {
+    setState(() {
+      _isMarkedFav = false;
+    });
+    if (dismissData.toString() == "DismissDirection.endToStart") {
+      setState(() {
+        currentIndex++;
+        currentWord = [
+          fetchedWords[currentIndex].id,
+          fetchedWords[currentIndex].title,
+          fetchedWords[currentIndex].defination,
+          fetchedWords[currentIndex].examples,
+        ];
+      });
+    }
+    if (dismissData.toString() == "DismissDirection.startToEnd") {
+      setState(
+        () {
+          currentIndex--;
+          currentWord = [
+            fetchedWords[currentIndex].id,
+            fetchedWords[currentIndex].title,
+            fetchedWords[currentIndex].defination,
+            fetchedWords[currentIndex].examples,
+          ];
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final favsListData = Provider.of<FavouriteWords>(context, listen: false);
-    return GestureDetector(
-      onHorizontalDragEnd: (obj) {
-        if (obj.velocity.pixelsPerSecond.dx < 0) {
-          setState(
-            () {
-              currentIndex++;
-              currentWord = [
-                fetchedWords[currentIndex].id,
-                fetchedWords[currentIndex].title,
-                fetchedWords[currentIndex].defination,
-                fetchedWords[currentIndex].examples,
-              ];
-            },
-          );
-        }
-        if (obj.velocity.pixelsPerSecond.dx > 0) {
-          setState(
-            () {
-              currentIndex--;
-              currentWord = [
-                fetchedWords[currentIndex].id,
-                fetchedWords[currentIndex].title,
-                fetchedWords[currentIndex].defination,
-                fetchedWords[currentIndex].examples,
-              ];
-            },
-          );
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Words",
-            style: Theme.of(context).textTheme.headline,
-          ),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Words",
+          style: Theme.of(context).textTheme.headline,
         ),
-        drawer: MyDrawer(),
-        body: GestureDetector(
-          child: SingleChildScrollView(
+        centerTitle: true,
+      ),
+      drawer: MyDrawer(),
+      body: SingleChildScrollView(
+        child: Dismissible(
+          key: ValueKey(currentWord[0]),
+          direction: DismissDirection.horizontal,
+          onDismissed: (data) => changeWord(data),
+          child: Container(
+            height: MediaQuery.of(context).size.height-70,
             child: WordWidget(currentWord),
           ),
         ),
-        floatingActionButton: Container(
-          padding: EdgeInsets.only(bottom: 50),
-          child: FloatingActionButton(
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(
-              Icons.star_border,
-              color: Colors.white,
-            ),
-            onPressed: () => favsListData.addFav(
+      ),
+      floatingActionButton: Container(
+        padding: EdgeInsets.only(bottom: 50),
+        child: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
+          child: _isMarkedFav
+              ? Icon(
+                  Icons.star,
+                  color: Colors.white,
+                )
+              : Icon(
+                  Icons.star_border,
+                  color: Colors.white,
+                ),
+          onPressed: () {
+            setState(() {
+              _isMarkedFav = !_isMarkedFav;
+            });
+            favsListData.addFav(
               Word(
                 id: currentWord[0],
                 title: currentWord[1],
                 defination: currentWord[2],
                 examples: currentWord[3],
               ),
-            ),
-          ),
+            );
+          },
         ),
-        bottomSheet: Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          height: 50,
-          child: Text(
-            "Swipe right for next word",
-            style: Theme.of(context).textTheme.headline,
-          ),
-          color: Theme.of(context).primaryColor,
+      ),
+      bottomSheet: Container(
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width,
+        height: 50,
+        child: Text(
+          "Swipe for next word",
+          style: Theme.of(context).textTheme.headline,
         ),
+        color: Theme.of(context).primaryColor,
       ),
     );
   }

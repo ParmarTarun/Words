@@ -7,15 +7,9 @@ class MyDrawer extends StatelessWidget {
       child: Drawer(
         child: Column(
           children: <Widget>[
-            ListTile(
-              title: Text(
-                "Words",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontFamily: 'Harlow',
-                  fontSize: 32,
-                ),
-              ),
+            AppBar(
+              title: Text("Words", style: Theme.of(context).textTheme.headline,),
+              automaticallyImplyLeading: false,
             ),
             ListTile(
               leading: Icon(Icons.home),
