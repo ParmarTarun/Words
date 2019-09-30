@@ -79,15 +79,15 @@ class _FavListState extends State<FavList> {
                                 ));
                       },
                       onDismissed: (_) =>
-                          favsListData.removeFav(favs[index].id),
+                          favsListData.removeFav(favs[index].id.toString()),
                       direction: DismissDirection.endToStart,
                       child: ListTile(
-                        onTap: () => toggle(favs[index].id),
+                        onTap: () => toggle(favs[index].id.toString()),
                         leading: IconButton(
                           icon: Icon(Icons.star,
                               color: Theme.of(context).primaryColor),
                           onPressed: () =>
-                              favsListData.removeFav(favs[index].id),
+                              favsListData.removeFav(favs[index].id.toString()),
                         ),
                         title: Text(
                           favs[index].title,
@@ -97,7 +97,7 @@ class _FavListState extends State<FavList> {
                             color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    showId != favs[index].id
+                    showId != favs[index].id.toString()
                         ? SizedBox()
                         : WordWidget([
                             favs[index].id,

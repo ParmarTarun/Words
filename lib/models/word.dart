@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Word {
   @required
-  final String id;
+  final int id;
   @required
   final String title;
   @required
