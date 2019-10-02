@@ -5,6 +5,7 @@ import './Screens/homeScreen.dart';
 import 'package:provider/provider.dart';
 
 import './Providers/favsProvider.dart';
+import './Providers/wordsProvider.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,8 +27,11 @@ class MyApp extends StatelessWidget {
       900: Color.fromRGBO(28, 40, 54, 1),
     };
     const MaterialColor primaryColor = MaterialColor(0xFF1c2836, color);
-    return ChangeNotifierProvider(
-      builder: (ctx)=>FavouriteWords(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(builder: (ctx) => FavsProvider()),
+        ChangeNotifierProvider(builder: (ctx) => WordsProvider())
+      ],
       child: MaterialApp(
         title: 'Words',
         theme: ThemeData(

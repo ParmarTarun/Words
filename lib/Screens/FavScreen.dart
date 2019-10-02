@@ -33,7 +33,7 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
       ),
       drawer: MyDrawer(),
       body: FavList(),
-      bottomSheet: Consumer<FavouriteWords>(
+      bottomSheet: Consumer<FavsProvider>(
         builder: (context, favs,child)=> GestureDetector(
           onTap: () => favs.clearAll(),
           child: Container(

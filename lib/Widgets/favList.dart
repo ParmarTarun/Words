@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:words/models/word.dart';
 
 import '../Widgets/wordWidget.dart';
 import '../Providers/favsProvider.dart';
@@ -26,7 +27,7 @@ class _FavListState extends State<FavList> {
 
   @override
   Widget build(BuildContext context) {
-    final favsListData = Provider.of<FavouriteWords>(context);
+    final favsListData = Provider.of<FavsProvider>(context);
     final favs = favsListData.favs;
     return favsListData.favs.length == 0
         ? Center(
@@ -99,12 +100,9 @@ class _FavListState extends State<FavList> {
                     ),
                     showId != favs[index].id
                         ? SizedBox()
-                        : WordWidget([
-                            favs[index].id,
-                            "",
-                            favs[index].defination,
-                            favs[index].examples
-                          ]),
+                        : WordWidget(
+                          Word(id: favs[index].id,title: "",defination: favs[index].defination,examples: favs[index].examples)
+                        ),
                   ],
                 ),
               );

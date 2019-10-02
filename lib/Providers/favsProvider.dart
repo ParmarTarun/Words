@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/word.dart';
 
-class FavouriteWords with ChangeNotifier {
+class FavsProvider with ChangeNotifier {
   List<Word> _favs = [];
 
   List<Word> get favs {
@@ -10,10 +10,13 @@ class FavouriteWords with ChangeNotifier {
   }
 
   void addFav(Word newFav) {
-    if(!_favs.contains(newFav)){
-      _favs.add(newFav);
-      notifyListeners();
-    }
+    _favs.add(Word(
+      id: newFav.id,
+      title: newFav.title,
+      defination: newFav.defination,
+      examples: newFav.examples,
+    ));
+    notifyListeners();
   }
 
   void removeFav(String removeId) {
@@ -21,7 +24,7 @@ class FavouriteWords with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearAll(){
+  void clearAll() {
     _favs.clear();
     notifyListeners();
   }

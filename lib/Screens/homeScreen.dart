@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Providers/favsProvider.dart';
+import '../Providers/wordsProvider.dart';
 import '../Widgets/drawer.dart';
 import '../Widgets/wordWidget.dart';
 import '../models/word.dart';
@@ -14,162 +15,66 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Word> fetchedWords = [
-    Word(
-      id: '1',
-      title: 'Word',
-      defination: 'Word is a group of alphabets',
-      examples: 'Word is a word',
-    ),
-    Word(
-      id: '2',
-      title: 'Keyboard',
-      defination: 'Keyboard is user input device',
-      examples: 'I use keyboard to type.',
-    ),
-    Word(
-      id: '3',
-      title: 'Home',
-      defination:
-          'the place where one lives permanently, especially as a member of a family or household',
-      examples: 'an old people\'s home',
-    ),
-    Word(
-      id: '4',
-      title: 'Mouse',
-      defination:
-          'a small rodent that typically has a pointed snout, relatively large ears and eyes, and a long tail',
-      examples: 'Cats chase mouse',
-    ),
-    Word(
-      id: '5',
-      title: 'Sentence',
-      defination:
-          'a set of words that is complete in itself, typically containing a subject and predicate, conveying a statement, question, exclamation, or command, and consisting of a main clause and sometimes one or more subordinate clauses.',
-      examples: 'This is a sentence',
-    ),
-    Word(
-      id: '6',
-      title: 'God',
-      defination:
-          '(in Christianity and other monotheistic religions) the creator and ruler of the universe and source of all moral authority; the supreme being.',
-      examples: 'God Damn it!',
-    ),
-    Word(
-      id: '7',
-      title: 'Man',
-      defination: 'an adult human male',
-      examples: 'Most intelligent animal',
-    ),
-    Word(
-      id: '8',
-      title: 'Hello',
-      defination: 'used as a greeting or to begin a telephone conversation',
-      examples: 'Hello evryone',
-    ),
-    Word(
-      id: '9',
-      title: 'Corpus',
-      defination:
-          'a collection of written texts, especially the entire works of a particular author or a body of writing on a particular subject',
-      examples: 'Corpus Frequency',
-    ),
-    Word(
-      id: '10',
-      title: 'Enter',
-      defination: 'come or go into (a place)',
-      examples: 'Enter your password',
-    ),
-    Word(
-      id: '11',
-      title: 'Example',
-      defination:
-          'a thing characteristic of its kind or illustrating a general rule',
-      examples: 'this is an example of word example',
-    ),
-    Word(
-      id: '12',
-      title: 'Frequency',
-      defination:
-          'he rate at which something occurs over a particular period of time or in a given sample',
-      examples: 'Frequecy is inversly proportional to Wavelength',
-    ),
-    Word(
-      id: '13',
-      title: 'API',
-      defination:
-          'a set of functions and procedures allowing the creation of applications that access the features or data of an operating system, application, or other service.',
-      examples: 'This App Uses Oxford dictionary APIs',
-    ),
-    Word(
-      id: '14',
-      title: 'Dictionary',
-      defination:
-          'a book or electronic resource that lists the words of a language (typically in alphabetical order) and gives their meaning, or gives the equivalent words in a different language, often also providing information about pronunciation, origin, and usag',
-      examples: 'Dictionaries are good source of learning new words',
-    ),
-    Word(
-      id: '15',
-      title: 'Out',
-      defination:
-          'moving or appearing to move away from a particular place, especially one that is enclosed or hidden',
-      examples: 'Get out',
-    ),
-    Word(
-      id: '16',
-      title: 'Try',
-      defination: 'make an attempt or effort to do something',
-      examples: 'Try everything before you die',
-    ),
-  ];
-  List currentWord;
-  int currentIndex = 0;
+  List<Word> _fetchedWords;
+  Word _currentWord;
+  int _currentIndex = 0;
   bool _isMarkedFav = false;
+  bool _isLoading = true;
+  bool _isNotStarted = true;
 
   @override
   void initState() {
-    currentWord = [
-      fetchedWords[currentIndex].id,
-      fetchedWords[currentIndex].title,
-      fetchedWords[currentIndex].defination,
-      fetchedWords[currentIndex].examples,
-    ];
+    _fetchedWords = Provider.of<WordsProvider>(context, listen: false).words;
+    _currentWord = _fetchedWords[_currentIndex];
     super.initState();
   }
 
-  void changeWord(DismissDirection dismissData) {
-    setState(() {
-      _isMarkedFav = false;
-    });
-    if (dismissData.toString() == "DismissDirection.endToStart") {
+  void _changeWord(DismissDirection dismissData) {
+    try {
+      print(_fetchedWords.length.toString() + " " + _currentIndex.toString());
+      if (_fetchedWords.length == _currentIndex + 3) {
+        //call for another batch
+        Provider.of<WordsProvider>(context, listen: false)
+            .fetchWords()
+            .then((_) =>
+                _fetchedWords = Provider.of<WordsProvider>(context).words)
+            .catchError((e) => print(e));
+      }
+      if (dismissData == DismissDirection.endToStart) {
+        //swipe right
+        _isNotStarted = false;
+        setState(() {
+          _currentIndex++;
+          _currentWord = _fetchedWords[_currentIndex];
+        });
+      }
+      if (dismissData == DismissDirection.startToEnd) {
+        //swipe left
+        _currentIndex--;
+        setState(
+          () {
+            _currentWord = _fetchedWords[_currentIndex];
+          },
+        );
+      }
       setState(() {
-        currentIndex++;
-        currentWord = [
-          fetchedWords[currentIndex].id,
-          fetchedWords[currentIndex].title,
-          fetchedWords[currentIndex].defination,
-          fetchedWords[currentIndex].examples,
-        ];
+        _isMarkedFav = false;
       });
-    }
-    if (dismissData.toString() == "DismissDirection.startToEnd") {
-      setState(
-        () {
-          currentIndex--;
-          currentWord = [
-            fetchedWords[currentIndex].id,
-            fetchedWords[currentIndex].title,
-            fetchedWords[currentIndex].defination,
-            fetchedWords[currentIndex].examples,
-          ];
-        },
-      );
+    } catch (e) {
+      showDialog(
+          context: context,
+          child: AlertDialog(
+            content: Text(
+              "I just want you to know that you came too far south and even i don't know how to get back. BYE! :)",
+              style: Theme.of(context).textTheme.body2,
+            ),
+          ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final favsListData = Provider.of<FavouriteWords>(context, listen: false);
+    final favsListData = Provider.of<FavsProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -181,42 +86,40 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Dismissible(
-          key: ValueKey(currentWord[0]),
+          key: ValueKey(_currentWord.id),
           direction: DismissDirection.horizontal,
-          onDismissed: (data) => changeWord(data),
+          onDismissed: (data) => _changeWord(data),
           child: Container(
-            height: MediaQuery.of(context).size.height-70,
-            child: WordWidget(currentWord),
+            height: MediaQuery.of(context).size.height - 70,
+            child: _isNotStarted
+                ? Center(
+                    child: Text("Swipe->"),
+                  )
+                : WordWidget(_currentWord),
           ),
         ),
       ),
       floatingActionButton: Container(
         padding: EdgeInsets.only(bottom: 50),
         child: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: _isMarkedFav
-              ? Icon(
-                  Icons.star,
-                  color: Colors.white,
-                )
-              : Icon(
-                  Icons.star_border,
-                  color: Colors.white,
-                ),
-          onPressed: () {
-            setState(() {
-              _isMarkedFav = !_isMarkedFav;
-            });
-            favsListData.addFav(
-              Word(
-                id: currentWord[0],
-                title: currentWord[1],
-                defination: currentWord[2],
-                examples: currentWord[3],
-              ),
-            );
-          },
-        ),
+            backgroundColor: Theme.of(context).primaryColor,
+            child: _isMarkedFav
+                ? Icon(
+                    Icons.star,
+                    color: Colors.white,
+                  )
+                : Icon(
+                    Icons.star_border,
+                    color: Colors.white,
+                  ),
+            onPressed: () {
+              setState(() {
+                _isMarkedFav = !_isMarkedFav;
+              });
+              _isMarkedFav
+                  ? favsListData.addFav(_currentWord)
+                  : favsListData.removeFav(_currentWord.id);
+            }),
       ),
       bottomSheet: Container(
         alignment: Alignment.center,
