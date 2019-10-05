@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Word _currentWord;
   int _currentIndex = 0;
   bool _isMarkedFav = false;
-  bool _isLoading = true;
-  bool _isNotStarted = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -32,17 +33,40 @@ class _HomeScreenState extends State<HomeScreen> {
   void _changeWord(DismissDirection dismissData) {
     try {
       print(_fetchedWords.length.toString() + " " + _currentIndex.toString());
-      if (_fetchedWords.length == _currentIndex + 3) {
+      if (_fetchedWords.length <= _currentIndex + 3) {
+        setState(() {
+          _isLoading = true;
+        });
         //call for another batch
         Provider.of<WordsProvider>(context, listen: false)
             .fetchWords()
-            .then((_) =>
-                _fetchedWords = Provider.of<WordsProvider>(context).words)
-            .catchError((e) => print(e));
+            .then(
+              (_) => _fetchedWords = Provider.of<WordsProvider>(context).words,
+            )
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        }).catchError((e) {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(
+                "Oops!Something Went wrong.",
+                style: Theme.of(context).textTheme.body2,
+              ),
+              content: Text(
+                e.runtimeType == SocketException
+                    ? "check your internet connection."
+                    : e.runtimeType,
+                style: Theme.of(context).textTheme.body2,
+              ),
+            ),
+          );
+        });
       }
       if (dismissData == DismissDirection.endToStart) {
         //swipe right
-        _isNotStarted = false;
         setState(() {
           _currentIndex++;
           _currentWord = _fetchedWords[_currentIndex];
@@ -50,6 +74,23 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       if (dismissData == DismissDirection.startToEnd) {
         //swipe left
+
+        if (_currentIndex == 0) {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(
+                "Oops...You've reached end of line",
+                style: Theme.of(context).textTheme.body2,
+              ),
+              content: Text(
+                "You should've swiped right!",
+                style: Theme.of(context).textTheme.body2,
+              ),
+            ),
+          );
+          return;
+        }
         _currentIndex--;
         setState(
           () {
@@ -61,14 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _isMarkedFav = false;
       });
     } catch (e) {
-      showDialog(
-          context: context,
-          child: AlertDialog(
-            content: Text(
-              "I just want you to know that you came too far south and even i don't know how to get back. BYE! :)",
-              style: Theme.of(context).textTheme.body2,
-            ),
-          ));
+      print(e.runtimeType);
     }
   }
 
@@ -85,19 +119,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: MyDrawer(),
       body: SingleChildScrollView(
-        child: Dismissible(
-          key: ValueKey(_currentWord.id),
-          direction: DismissDirection.horizontal,
-          onDismissed: (data) => _changeWord(data),
-          child: Container(
-            height: MediaQuery.of(context).size.height - 70,
-            child: _isNotStarted
-                ? Center(
-                    child: Text("Swipe->"),
-                  )
-                : WordWidget(_currentWord),
-          ),
-        ),
+        child: _isLoading
+            ? 
+                 Center(
+                   heightFactor: 10.0,
+                  child: CircularProgressIndicator(),
+                )
+            : Dismissible(
+                key: ValueKey(_currentWord.id),
+                direction: DismissDirection.horizontal,
+                onDismissed: (data) => _changeWord(data),
+                child: Container(
+                  height: MediaQuery.of(context).size.height - 70,
+                  child: WordWidget(_currentWord),
+                ),
+              ),
       ),
       floatingActionButton: Container(
         padding: EdgeInsets.only(bottom: 50),

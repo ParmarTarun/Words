@@ -17,27 +17,27 @@ class WordsProvider with ChangeNotifier {
       defination: 'Keyboard is user input device',
       examples: 'I use keyboard to type.',
     ),
-    Word(
-      id: '3',
-      title: 'Home',
-      defination:
-          'the place where one lives permanently, especially as a member of a family or household',
-      examples: 'an old people\'s home',
-    ),
-    Word(
-      id: '4',
-      title: 'Mouse',
-      defination:
-          'a small rodent that typically has a pointed snout, relatively large ears and eyes, and a long tail',
-      examples: 'Cats chase mouse',
-    ),
-    Word(
-      id: '5',
-      title: 'Sentence',
-      defination:
-          'a set of words that is complete in itself, typically containing a subject and predicate, conveying a statement, question, exclamation, or command, and consisting of a main clause and sometimes one or more subordinate clauses.',
-      examples: 'This is a sentence',
-    ),
+    // Word(
+    //   id: '3',
+    //   title: 'Home',
+    //   defination:
+    //       'the place where one lives permanently, especially as a member of a family or household',
+    //   examples: 'an old people\'s home',
+    // ),
+    // Word(
+    //   id: '4',
+    //   title: 'Mouse',
+    //   defination:
+    //       'a small rodent that typically has a pointed snout, relatively large ears and eyes, and a long tail',
+    //   examples: 'Cats chase mouse',
+    // ),
+    // Word(
+    //   id: '5',
+    //   title: 'Sentence',
+    //   defination:
+    //       'a set of words that is complete in itself, typically containing a subject and predicate, conveying a statement, question, exclamation, or command, and consisting of a main clause and sometimes one or more subordinate clauses.',
+    //   examples: 'This is a sentence',
+    // ),
     // Word(
     //   id: '6',
     //   title: 'God',
@@ -119,17 +119,17 @@ class WordsProvider with ChangeNotifier {
 
   Future<void> fetchWords() async {
     try {
-      final response = await http.get('https://wordsapi69.firebaseapp.com/word:3');
+      final response =
+          await http.get('https://wordsapi69.firebaseapp.com/word:10');
       final extractedData = json.decode(response.body) as List;
-      extractedData.forEach((temp)=>{
+      extractedData.forEach((temp) {
         _words.add(Word(
-          id: temp['id'],
-          title: temp['word'],
-          defination: temp['meaning'],
-          examples:temp['word']
-        ))
-        });
-        notifyListeners();
+            id: temp['id'],
+            title: temp['word'],
+            defination: temp['meaning'],
+            examples: temp['word']));
+      });
+      notifyListeners();
     } catch (e) {
       throw e;
     }

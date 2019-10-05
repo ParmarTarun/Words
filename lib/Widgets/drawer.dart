@@ -8,7 +8,10 @@ class MyDrawer extends StatelessWidget {
         child: Column(
           children: <Widget>[
             AppBar(
-              title: Text("Words", style: Theme.of(context).textTheme.headline,),
+              title: Text(
+                "Words",
+                style: Theme.of(context).textTheme.headline,
+              ),
               automaticallyImplyLeading: false,
             ),
             ListTile(
@@ -18,7 +21,10 @@ class MyDrawer extends StatelessWidget {
                 Navigator.of(context).pushNamed('/home');
               },
             ),
-            Divider(color: Theme.of(context).primaryColor,endIndent: 30,),
+            Divider(
+              color: Theme.of(context).primaryColor,
+              endIndent: 30,
+            ),
             ListTile(
               leading: Icon(Icons.star),
               title: Text("Favourites"),
@@ -26,7 +32,10 @@ class MyDrawer extends StatelessWidget {
                 Navigator.of(context).pushNamed('/favourites');
               },
             ),
-            Divider(color: Theme.of(context).primaryColor,endIndent: 30,),
+            Divider(
+              color: Theme.of(context).primaryColor,
+              endIndent: 30,
+            ),
           ],
         ),
       ),
