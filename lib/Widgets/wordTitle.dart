@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
-class WordTitle extends StatelessWidget {
+import 'package:flutter_text_to_speech/flutter_text_to_speech.dart';
 
+class WordTitle extends StatelessWidget {
   final String title;
 
   WordTitle(this.title);
+
+  void _playWord(String toSpeak) {
+    VoiceController controller = FlutterTextToSpeech.instance.voiceController();
+
+    controller.init().then((_) {
+      controller.speak(toSpeak);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +32,7 @@ class WordTitle extends StatelessWidget {
               Icons.play_arrow,
               size: 40.0,
             ),
-            onPressed: () {},
+            onPressed: ()=>_playWord(title),
           )
         ],
       ),

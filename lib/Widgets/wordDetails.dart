@@ -24,17 +24,17 @@ class WordDetails extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Text(
-            "examples:",
-            style: Theme.of(context).textTheme.subtitle,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            examples,
-            style: Theme.of(context).textTheme.body2,
-          ),
+          // Text(
+          //   "examples:",
+          //   style: Theme.of(context).textTheme.subtitle,
+          // ),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // Text(
+          //   examples,
+          //   style: Theme.of(context).textTheme.body2,
+          // ),
         ],
       ),
     );

@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
 import '../Providers/favsProvider.dart';
 import '../Providers/wordsProvider.dart';
 import '../Widgets/drawer.dart';
 import '../Widgets/wordWidget.dart';
 import '../models/word.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -32,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _changeWord(DismissDirection dismissData) {
     try {
-      print(_fetchedWords.length.toString() + " " + _currentIndex.toString());
+      // print(_fetchedWords.length.toString() + " " + _currentIndex.toString());
       if (_fetchedWords.length <= _currentIndex + 3) {
         setState(() {
           _isLoading = true;
@@ -102,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _isMarkedFav = false;
       });
     } catch (e) {
-      print(e.runtimeType);
+      // print(e.runtimeType);
     }
   }
 
