@@ -6,5 +6,5 @@ A new Flutter project.
 
 A Mobile Application based on Flutter that provides user to learn new words.
 
-## Plan
+## Views
 <img src="/Plan/Plan.jpg" width="600" />
